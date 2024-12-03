@@ -8,7 +8,7 @@ It also serves as a template for creating Orca Note plugins.
 
 ## Usage
 
-1. Place the the project's folder into Orca Note's `plugins` directory.
+1. Place the the project's folder into Orca Note's `plugins` directory (Orca Note's directory is located under your user's documents directory, e.g. `/Users/username/Documents/orca`, `C:\Users\username\Documents\orca`).
 
 2. Run `pnpm build` on the project's root directory to build the plugin.
 
