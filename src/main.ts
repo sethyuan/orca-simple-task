@@ -260,11 +260,11 @@ async function readyTag(isUpdate: boolean = false) {
 
 function injectStyles() {
   const settings = orca.state.plugins[pluginName]!.settings!
-  const taskTagName = settings.taskName.toLowerCase()
-  const statusPropName = settings.statusName.toLowerCase()
-  const statusTodoValue = settings.statusTodo
-  const statusDoingValue = settings.statusDoing
-  const statusDoneValue = settings.statusDone
+  const taskTagName = settings.taskName.replace(/ /g, "-").toLowerCase()
+  const statusPropName = settings.statusName.replace(/ /g, "-").toLowerCase()
+  const statusTodoValue = settings.statusTodo.replace(/ /g, "-")
+  const statusDoingValue = settings.statusDoing.replace(/ /g, "-")
+  const statusDoneValue = settings.statusDone.replace(/ /g, "-")
 
   const styles = `
     .orca-repr-main:has(>.orca-tags .orca-tag[data-name="${taskTagName}"]) .orca-repr-main-content::before {
