@@ -4,6 +4,8 @@ A Orca Note plugin that provides the ability to create tasks.
 
 It also serves as a template for creating Orca Note plugins.
 
+![image](https://github.com/user-attachments/assets/eb2f7bd7-d420-4352-93a7-249bed7808e2)
+
 ## Usage
 
 1. Place the the project's folder into Orca Note's `plugins` directory.
