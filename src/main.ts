@@ -260,7 +260,7 @@ async function readyTag(isUpdate: boolean = false) {
 
 function injectStyles() {
   const settings = orca.state.plugins[pluginName]!.settings!
-  const taskTagName = settings.taskName.replace(/ /g, "-").toLowerCase()
+  const taskTagName = settings.taskName.toLowerCase()
   const statusPropName = settings.statusName.replace(/ /g, "-").toLowerCase()
   const statusTodoValue = settings.statusTodo.replace(/ /g, "-")
   const statusDoingValue = settings.statusDoing.replace(/ /g, "-")
