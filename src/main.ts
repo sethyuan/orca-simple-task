@@ -80,7 +80,7 @@ export async function load(_name: string) {
 
   unsubscribe = subscribe(orca.state.plugins[pluginName]!, async () => {
     if (orca.state.plugins[pluginName]!.settings) {
-      await readyTag()
+      await readyTag(true)
       removeStyles()
       injectStyles()
     } else {
@@ -191,13 +191,19 @@ async function readyTag(isUpdate: boolean = false) {
 
   // Remove old task tag
   if (settings.taskName !== prevTaskTagName) {
-    const oldTaskId = await orca.invokeBackend(
-      "get-blockid-by-alias",
-      prevTaskTagName,
-    )
-    await orca.commands.invokeEditorCommand("core.editor.deleteBlocks", null, [
-      oldTaskId,
-    ])
+    const { id: oldTaskId } =
+      (await orca.invokeBackend("get-blockid-by-alias", prevTaskTagName)) ?? {}
+    if (oldTaskId) {
+      try {
+        await orca.commands.invokeEditorCommand(
+          "core.editor.deleteBlocks",
+          null,
+          [oldTaskId],
+        )
+      } catch (err) {
+        // ignore
+      }
+    }
   }
 
   let { id: taskBlockId } =
@@ -221,6 +227,8 @@ async function readyTag(isUpdate: boolean = false) {
         settings.taskName,
         taskBlockId,
       )
+
+      prevTaskTagName = settings.taskName
     })
   }
 

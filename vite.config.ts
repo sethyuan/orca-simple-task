@@ -13,6 +13,7 @@ export default defineConfig(({ command }) => {
       },
     },
     build: {
+      minify: false,
       lib: {
         entry: "src/main.ts",
         fileName: "index",
