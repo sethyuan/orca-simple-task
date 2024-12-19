@@ -275,7 +275,7 @@ function injectStyles() {
   const statusDoneValue = settings.statusDone
 
   const styles = `
-    .orca-repr-main:has(>.orca-tags .orca-tag[data-name="${taskTagName}"]) .orca-repr-main-content::before {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"])::before {
       font-family: "tabler-icons";
       speak: none;
       font-style: normal;
@@ -287,19 +287,19 @@ function injectStyles() {
       cursor: pointer;
     }
 
-    .orca-repr-main:has(>.orca-tags .orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"]) .orca-repr-main-content::before {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])::before {
       content: "\\ed27";
     }
 
-    .orca-repr-main:has(>.orca-tags .orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"]) .orca-repr-main-content::before {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"])::before {
       content: "\\fa0d";
     }
 
-    .orca-repr-main:has(>.orca-tags .orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) .orca-repr-main-content::before {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])::before {
       content: "\\f704";
     }
 
-    .orca-repr-main:has(>.orca-tags .orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) {
       opacity: 0.75;
     }
   `
