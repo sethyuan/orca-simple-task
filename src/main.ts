@@ -299,7 +299,7 @@ function injectStyles() {
       content: "\\f704";
     }
 
-    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) .orca-inline {
       opacity: 0.75;
     }
   `
