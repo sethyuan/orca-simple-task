@@ -1,6 +1,6 @@
 import { setupL10N, t } from "./libs/l10n"
 import { getMirrorId } from "./libs/utils.ts"
-import type { DbId } from "./orca.d.ts"
+import type { Block, DbId } from "./orca.d.ts"
 import zhCN from "./translations/zhCN"
 
 const { subscribe } = window.Valtio
@@ -206,9 +206,12 @@ async function readyTag(isUpdate: boolean = false) {
     }
   }
 
-  let { id: taskBlockId } =
-    (await orca.invokeBackend("get-blockid-by-alias", settings.taskName)) ?? {}
-  const nonExistent = taskBlockId == null
+  let taskBlock = (await orca.invokeBackend(
+    "get-block-by-alias",
+    settings.taskName,
+  )) as Block
+  let taskBlockId = taskBlock?.id
+  const nonExistent = taskBlock == null
 
   // Ensure task tag exists
   if (nonExistent) {
@@ -250,16 +253,25 @@ async function readyTag(isUpdate: boolean = false) {
               settings.statusDone,
             ],
           },
+          pos: taskBlock?.properties?.find(
+            (p) => p.name === settings.statusName,
+          )?.pos,
         },
         {
           name: settings.startTimeName,
           type: 5,
           typeArgs: { subType: "datetime" },
+          pos: taskBlock?.properties?.find(
+            (p) => p.name === settings.startTimeName,
+          )?.pos,
         },
         {
           name: settings.endTimeName,
           type: 5,
           typeArgs: { subType: "datetime" },
+          pos: taskBlock?.properties?.find(
+            (p) => p.name === settings.endTimeName,
+          )?.pos,
         },
       ],
     )
