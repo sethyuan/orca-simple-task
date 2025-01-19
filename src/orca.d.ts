@@ -45,6 +45,9 @@ export interface OrcaAPI {
     toolbarButtons: Record<string, ToolbarButton | ToolbarButton[]>
     slashCommands: Record<string, SlashCommandWithPinyin>
     blockMenuCommands: Record<string, BlockMenuCommand>
+    tagMenuCommands: Record<string, TagMenuCommand>
+    sidebarTab: string
+    filterInTags?: string
   }
   commands: {
     registerCommand(id: string, fn: CommandFn, label?: string): void
@@ -88,7 +91,7 @@ export interface OrcaAPI {
     closeAllBut(id: string): void
     changeSizes(startPanelId: string, values: number[])
     switchFocusTo(id: string): void
-    goBack(): void
+    goBack(withRedo?: boolean): void
     goForward(): void
     goTo(
       view: PanelView,
@@ -175,8 +178,40 @@ export interface OrcaAPI {
     unregisterHandler(type: string): void
     broadcast(type: string, ...args: any[]): void
   }
+  // TODO: describe component props
   components: {
+    Block: any
+    BlockBreadcrumb: any
+    BlockChildren: any
+    BlockSelect: any
+    BlockShell: any
+    Breadcrumb: any
     Button: any
+    Checkbox: any
+    CompositionInput: any
+    CompositionTextArea: any
+    ConfirmBox: any
+    ContextMenu: any
+    DatePicker: any
+    HoverContextMenu: any
+    Image: any
+    Input: any
+    InputBox: any
+    LoadMore: any
+    MemoizedViews: any
+    Menu: any
+    MenuItem: any
+    MenuSeparator: any
+    MenuText: any
+    MenuTitle: any
+    ModalOverlay: any
+    Popup: any
+    Segmented: any
+    Select: any
+    Skeleton: any
+    Switch: any
+    Table: any
+    Tooltip: any
   }
   toolbar: {
     registerToolbarButton(
@@ -193,6 +228,10 @@ export interface OrcaAPI {
     registerBlockMenuCommand(id: string, command: BlockMenuCommand): void
     unregisterBlockMenuCommand(id: string): void
   }
+  tagMenuCommands: {
+    registerTagMenuCommand(id: string, command: TagMenuCommand): void
+    unregisterTagMenuCommand(id: string): void
+  }
   notify: (
     type: "info" | "success" | "warn" | "error",
     message: string,
@@ -205,6 +244,7 @@ export interface OrcaAPI {
 
 // Backend API
 export type APIMsg =
+  | "add-repo"
   | "assign-shortcut"
   | "batch-insert-text"
   | "change-ref-data-name"
@@ -220,7 +260,9 @@ export type APIMsg =
   | "delete-blocks"
   | "delete-properties"
   | "delete-ref"
+  | "delete-refs"
   | "delete-ref-data"
+  | "delete-ref-data-by-tag-prop"
   | "delete-repo"
   | "disable-plugin"
   | "enable-plugin"
@@ -229,6 +271,8 @@ export type APIMsg =
   | "export-txt"
   | "find-days-with-journal"
   | "find-text"
+  | "fold-block"
+  | "get-aliased-blocks"
   | "get-aliases"
   | "get-aliases-ids"
   | "get-all-settings"
@@ -240,7 +284,8 @@ export type APIMsg =
   | "get-blocks-with-tags"
   | "get-block-tree"
   | "get-children-tags"
-  | "get-full-children-tags"
+  | "get-children-tag-blocks"
+  | "get-headings"
   | "get-journal-block"
   | "get-plugin-data-keys"
   | "get-plugin-data"
@@ -252,6 +297,7 @@ export type APIMsg =
   | "get-tag-properties"
   | "get-tags-from-refs-of-blocks"
   | "get-tags-for-tag-combo"
+  | "get-top-include-in"
   | "has-ref-data"
   | "move-blocks"
   | "open-repo"
@@ -264,6 +310,7 @@ export type APIMsg =
   | "remove-shortcuts-from-command"
   | "rename-alias"
   | "rename-repo"
+  | "reset-documentation"
   | "scan-repos"
   | "search-aliases"
   | "search-blocks-by-text"
@@ -283,6 +330,7 @@ export type APIMsg =
   | "show-window"
   | "undo-batch-insert-text"
   | "undo-change-ref-data-name"
+  | "undo-create-block"
   | "undo-delete-properties"
   | "undo-delete-ref-data"
   | "undo-move-blocks"
@@ -357,8 +405,8 @@ export type EditorArg = [
   // isRedo
   boolean,
 ]
-export type BeforeHookPred = (id: string, args: any[]) => boolean
-export type AfterHook = (id: string, args: any[]) => void | Promise<void>
+export type BeforeHookPred = (id: string, ...args: any[]) => boolean
+export type AfterHook = (id: string, ...args: any[]) => void | Promise<void>
 export interface CursorData {
   anchor: CursorNodeData
   focus: CursorNodeData
@@ -450,6 +498,11 @@ export type BlockMenuCommand =
       ) => React.ReactElement
     }
 
+// Tag Menu Command
+export type TagMenuCommand = {
+  render: (tagBlock: Block, close: () => void) => React.ReactElement
+}
+
 // Blocks
 export type DbId = number
 export interface Block {
@@ -506,8 +559,6 @@ export interface BlockTag {
 
 // Query
 export interface QueryDescription {
-  fullText?: string
-  raw?: boolean
   q?: QueryGroup
   excludeId?: DbId
   sort?: QuerySort[]
@@ -531,6 +582,7 @@ export type QueryItem =
   | QueryJournal
   | QueryRef
   | QueryNoRef
+  | QueryText
 export interface QueryGroup {
   kind: QueryKindAnd | QueryKindOr
   conditions: QueryItem[]
@@ -566,6 +618,12 @@ export interface QueryNoRef {
   kind: QueryKindNoRef
   blockId: DbId
 }
+export interface QueryText {
+  kind: QueryKindText
+  text: string
+  raw?: boolean
+  includeDescendants?: boolean
+}
 export interface QueryTagProperty {
   name: string
   type?: number
@@ -580,6 +638,8 @@ export interface QueryTagProperty {
     | QueryLt
     | QueryGe
     | QueryLe
+    | QueryNull
+    | QueryNotNull
   value?: any
 }
 export type QuerySort = [string, "ASC" | "DESC"]
@@ -601,6 +661,7 @@ export type QueryKindTag = 4
 export type QueryKindNoTag = 5
 export type QueryKindRef = 6
 export type QueryKindNoRef = 7
+export type QueryKindText = 8
 export type QueryEq = 1
 export type QueryNotEq = 2
 export type QueryIncludes = 3
@@ -611,6 +672,8 @@ export type QueryGt = 7
 export type QueryLt = 8
 export type QueryGe = 9
 export type QueryLe = 10
+export type QueryNull = 11
+export type QueryNotNull = 12
 export type QueryJournalRelative = 1
 export type QueryJournalFull = 2
 
