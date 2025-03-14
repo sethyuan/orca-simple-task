@@ -22,7 +22,7 @@ export async function load(_name: string) {
       label: t("Task tag name"),
       description: t("The name of the tag that is used to identify tasks."),
       type: "string",
-      defaultValue: "Task",
+      defaultValue: "TASK",
     },
     statusName: {
       label: t("Status property name"),
@@ -38,7 +38,7 @@ export async function load(_name: string) {
         "The value of the status property that represents a task that is not started yet.",
       ),
       type: "string",
-      defaultValue: "TODO",
+      defaultValue: "LATER",
     },
     statusDoing: {
       label: t("Doing status value"),
@@ -46,7 +46,7 @@ export async function load(_name: string) {
         "The value of the status property that represents a task that is in progress.",
       ),
       type: "string",
-      defaultValue: "Doing",
+      defaultValue: "NOW",
     },
     statusDone: {
       label: t("Done status value"),
@@ -54,7 +54,7 @@ export async function load(_name: string) {
         "The value of the status property that represents a task that is completed.",
       ),
       type: "string",
-      defaultValue: "Done",
+      defaultValue: "DONE",
     },
     startTimeName: {
       label: t("Start time property name"),
@@ -62,7 +62,7 @@ export async function load(_name: string) {
         "The name of the property that stores the start time of a task.",
       ),
       type: "string",
-      defaultValue: "Start time",
+      defaultValue: "START",
     },
     endTimeName: {
       label: t("End time property name"),
@@ -70,7 +70,23 @@ export async function load(_name: string) {
         "The name of the property that stores the end time of a task.",
       ),
       type: "string",
-      defaultValue: "End time",
+      defaultValue: "END",
+    },
+    scheduledTimeName: {  // 新增预约时间字段
+      label: t("Scheduled time property name"),
+      description: t(
+        "The name of the property that stores the scheduled time of a task.",
+      ),
+      type: "string",
+      defaultValue: "SCHEDULED",
+    },
+    deadlineTimeName: {  // 新增截止时间字段
+      label: t("Deadline time property name"),
+      description: t(
+        "The name of the property that stores the deadline time of a task.",
+      ),
+      type: "string",
+      defaultValue: "DEADLINE",
     },
   })
 
@@ -273,6 +289,22 @@ async function readyTag(isUpdate: boolean = false) {
             (p) => p.name === settings.endTimeName,
           )?.pos,
         },
+        {  // 新增预约时间属性
+          name: settings.scheduledTimeName,
+          type: 5,
+          typeArgs: { subType: "datetime" },
+          pos: taskBlock?.properties?.find(
+            (p) => p.name === settings.scheduledTimeName,
+          )?.pos,
+        },
+        {  // 新增截止时间属性
+          name: settings.deadlineTimeName,
+          type: 5,
+          typeArgs: { subType: "datetime" },
+          pos: taskBlock?.properties?.find(
+            (p) => p.name === settings.deadlineTimeName,
+          )?.pos,
+        },
       ],
     )
   }
@@ -300,15 +332,36 @@ function injectStyles() {
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])::before {
-      content: "\\ed27";
+      content: "\\ea6b";
+      color: #858585;
+      width: 1.8125rem;
+      display: inline-block;
+      margin-right: 0;
+      text-align: center;
+      transform: scale(1.5);
+      transform-origin: 1.5rem center;
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"])::before {
-      content: "\\fa0d";
+      content: "\\fe56";
+      color: #ebbc00;
+      width: 1.8125rem;
+      display: inline-block;
+      margin-right: 0;
+      text-align: center;
+      transform: scale(1.5);
+      transform-origin: 1.5rem center;
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])::before {
       content: "\\f704";
+      color: #5bb98c;
+      width: 1.8125rem;
+      display: inline-block;
+      margin-right: 0;
+      text-align: center;
+      transform: scale(1.5);
+      transform-origin: 1.5rem center;
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) .orca-inline {

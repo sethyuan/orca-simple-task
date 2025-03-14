@@ -17,6 +17,12 @@ const zhCN = {
   "Start time property name": "开始时间属性名称",
   "The name of the property that stores the start time of a task.":
     "用于存储任务开始时间的属性名称。",
+  "Scheduled time property name": "预约时间属性名称",
+  "The name of the property that stores the scheduled time of a task.": 
+    "用于存储任务预约时间的属性名称。",
+  "Deadline time property name": "截止时间属性名称",
+  "The name of the property that stores the deadline time of a task.": 
+    "用于存储任务截止时间的属性名称。",
   "End time property name": "结束时间属性名称",
   "The name of the property that stores the end time of a task.":
     "用于存储任务结束时间的属性名称。",
