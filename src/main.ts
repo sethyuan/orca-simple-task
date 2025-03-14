@@ -331,10 +331,8 @@ function onClick(e: MouseEvent) {
   const target = e.target as HTMLElement
   if (!target?.classList.contains("orca-repr-main-content")) return
 
-  const styles = getComputedStyle(target)
-  const paddingLeft = Number.parseInt(styles.paddingLeft)
   const rect = target.getBoundingClientRect()
-  const x = e.clientX - rect.left - paddingLeft
+  const x = e.clientX - rect.left
   const y = e.clientY - rect.top
   if (x < 0 || x > 18 || y < 0 || y > 18) return
 
