@@ -297,18 +297,25 @@ function injectStyles() {
       -webkit-font-smoothing: antialiased;
       margin-right: var(--orca-spacing-md);
       cursor: pointer;
+      font-size: var(--orca-fontsize-xl);
+      display: inline-block;
+      translate: 0 2px;
+      line-height: 1;
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])::before {
-      content: "\\ed27";
+      content: "\\ea6b";
+      color: var(--orca-color-text-2);
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"])::before {
-      content: "\\fa0d";
+      content: "\\fedd";
+      color: var(--orca-color-text-yellow);
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])::before {
       content: "\\f704";
+      color: var(--orca-color-text-green);
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) .orca-inline {
