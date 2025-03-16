@@ -4,7 +4,7 @@ A Orca Note plugin that provides the ability to create tasks.
 
 It also serves as a template for creating Orca Note plugins.
 
-![image](https://github.com/user-attachments/assets/eb2f7bd7-d420-4352-93a7-249bed7808e2)
+![example](https://github.com/user-attachments/assets/01f2fc10-7dd9-451c-84be-260eec38a8fd)
 
 ## Usage
 
