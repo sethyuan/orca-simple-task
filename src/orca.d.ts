@@ -4,6 +4,7 @@ declare global {
     orca: OrcaAPI
     React: any
     Valtio: any
+    observer: any
   }
 }
 
