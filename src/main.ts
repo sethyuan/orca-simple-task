@@ -287,7 +287,7 @@ function injectStyles() {
   const statusDoneValue = settings.statusDone
 
   const styles = `
-    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"])::before {
+    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"])>.orca-repr-main>.orca-repr-main-content::before {
       font-family: "tabler-icons";
       speak: none;
       font-style: normal;
@@ -303,22 +303,22 @@ function injectStyles() {
       line-height: 1;
     }
 
-    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])::before {
+    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])>.orca-repr-main>.orca-repr-main-content::before {
       content: "\\ea6b";
       color: var(--orca-color-text-2);
     }
 
-    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"])::before {
+    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"])>.orca-repr-main>.orca-repr-main-content::before {
       content: "\\fedd";
       color: var(--orca-color-text-yellow);
     }
 
-    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])::before {
+    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])>.orca-repr-main>.orca-repr-main-content::before {
       content: "\\f704";
       color: var(--orca-color-text-green);
     }
 
-    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) .orca-inline {
+    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])>.orca-repr-main>.orca-repr-main-content .orca-inline {
       opacity: 0.75;
     }
   `
@@ -339,20 +339,23 @@ function onClick(e: MouseEvent) {
   if (!target?.classList.contains("orca-repr-main-content")) return
 
   const rect = target.getBoundingClientRect()
+  const styles = window.getComputedStyle(target)
+  const paddingLeft = parseFloat(styles.paddingLeft)
   const x = e.clientX - rect.left
   const y = e.clientY - rect.top
-  if (x < 0 || x > 18 || y < 0 || y > 18) return
+  const size = 18 + (paddingLeft || 0)
+  if (x < 0 || x > size || y < 0 || y > size) return
 
   const settings = orca.state.plugins[pluginName]!.settings!
-  const parent = target.parentElement
+  const blockEl = target.closest(".orca-block") as HTMLElement | undefined
   if (
-    parent?.querySelector(
+    blockEl?.querySelector(
       `.orca-tag[data-name="${settings.taskName.toLowerCase()}"]`,
     ) == null
   )
     return
 
-  const blockId = (parent.closest(".orca-block") as HTMLElement)?.dataset.id
+  const blockId = blockEl?.dataset.id
   if (blockId == null) return
 
   orca.commands.invokeEditorCommand(
