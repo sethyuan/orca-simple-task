@@ -287,7 +287,8 @@ function injectStyles() {
   const statusDoneValue = settings.statusDone
 
   const styles = `
-    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"])>.orca-repr-main>.orca-repr-main-content::before {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"])::before,
+    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"])>.orca-repr-main>.orca-repr-main-content::before {
       font-family: "tabler-icons";
       speak: none;
       font-style: normal;
@@ -303,22 +304,26 @@ function injectStyles() {
       line-height: 1;
     }
 
-    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])>.orca-repr-main>.orca-repr-main-content::before {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])::before,
+    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])>.orca-repr-main>.orca-repr-main-content::before {
       content: "\\ea6b";
       color: var(--orca-color-text-2);
     }
 
-    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"])>.orca-repr-main>.orca-repr-main-content::before {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"])::before,
+    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoingValue}"])>.orca-repr-main>.orca-repr-main-content::before {
       content: "\\fedd";
       color: var(--orca-color-text-yellow);
     }
 
-    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])>.orca-repr-main>.orca-repr-main-content::before {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])::before,
+    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])>.orca-repr-main>.orca-repr-main-content::before {
       content: "\\f704";
       color: var(--orca-color-text-green);
     }
 
-    .orca-repr:has(.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])>.orca-repr-main>.orca-repr-main-content .orca-inline {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) .orca-inline,
+    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])>.orca-repr-main>.orca-repr-main-content .orca-inline {
       opacity: 0.75;
     }
   `
