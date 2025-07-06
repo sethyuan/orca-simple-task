@@ -1,6 +1,6 @@
 {
   "name": "orca-plugin-simple-task",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

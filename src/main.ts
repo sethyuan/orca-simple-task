@@ -56,6 +56,14 @@ export async function load(_name: string) {
       type: "string",
       defaultValue: "Done",
     },
+    statusCanceled: {
+      label: t("Canceled status value"),
+      description: t(
+        "The value of the status property that represents a task that is canceled.",
+      ),
+      type: "string",
+      defaultValue: "Canceled",
+    },
     startTimeName: {
       label: t("Start time property name"),
       description: t(
@@ -251,6 +259,7 @@ async function readyTag(isUpdate: boolean = false) {
               settings.statusTodo,
               settings.statusDoing,
               settings.statusDone,
+              settings.statusCanceled,
             ],
           },
           pos: taskBlock?.properties?.find(
@@ -285,6 +294,7 @@ function injectStyles() {
   const statusTodoValue = settings.statusTodo
   const statusDoingValue = settings.statusDoing
   const statusDoneValue = settings.statusDone
+  const statusCanceledValue = settings.statusCanceled
 
   const styles = `
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"])::before,
@@ -322,8 +332,16 @@ function injectStyles() {
       color: var(--orca-color-text-green);
     }
 
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusCanceledValue}"])::before,
+    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusCanceledValue}"])>.orca-repr-main>.orca-repr-main-content::before {
+      content: "\\ff11";
+      color: var(--orca-color-text-2);
+    }
+
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"]) .orca-inline,
-    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])>.orca-repr-main>.orca-repr-main-content .orca-inline {
+    .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusCanceledValue}"]) .orca-inline,
+    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusDoneValue}"])>.orca-repr-main>.orca-repr-main-content .orca-inline,
+    .orca-repr:has(>.orca-repr-card-title>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusCanceledValue}"])>.orca-repr-main>.orca-repr-main-content .orca-inline {
       opacity: 0.75;
     }
   `
