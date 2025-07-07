@@ -373,7 +373,7 @@ function onClick(e: MouseEvent) {
   const blockEl = target.closest(".orca-block") as HTMLElement | undefined
   if (
     blockEl?.querySelector(
-      `.orca-tag[data-name="${settings.taskName.toLowerCase()}"]`,
+      `&>.orca-repr>:not(.orca-block) .orca-tag[data-name="${settings.taskName.toLowerCase()}"]`,
     ) == null
   )
     return
