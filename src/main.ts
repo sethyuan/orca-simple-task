@@ -309,9 +309,9 @@ function injectStyles() {
       margin-right: var(--orca-spacing-md);
       cursor: pointer;
       font-size: calc(.25rem + var(--orca-block-line-height) / var(--orca-lineheight-md));
-      display: block;
-      float:left;
-      line-height: var(--orca-block-line-height);
+      display: inline-block;
+      line-height: 1;
+      translate: 0 .125rem;
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])::before,
