@@ -308,10 +308,10 @@ function injectStyles() {
       -webkit-font-smoothing: antialiased;
       margin-right: var(--orca-spacing-md);
       cursor: pointer;
-      font-size: var(--orca-fontsize-xl);
-      display: inline-block;
-      translate: 0 2px;
-      line-height: 1;
+      font-size: calc(.25rem + var(--orca-block-line-height) / var(--orca-lineheight-md));
+      display: block;
+      float:left;
+      line-height: var(--orca-block-line-height);
     }
 
     .orca-repr-main-content:has(>.orca-tags>.orca-tag[data-name="${taskTagName}"][data-${statusPropName}="${statusTodoValue}"])::before,
@@ -366,8 +366,9 @@ function onClick(e: MouseEvent) {
   const paddingLeft = parseFloat(styles.paddingLeft)
   const x = e.clientX - rect.left
   const y = e.clientY - rect.top
-  const size = 18 + (paddingLeft || 0)
-  if (x < 0 || x > size || y < 0 || y > size) return
+  const sizeX = parseFloat(styles.fontSize) + (paddingLeft || 0);
+  const sizeY = parseFloat(styles.lineHeight);
+  if (x < 0 || x > sizeX || y < 0 || y > sizeY) return;
 
   const settings = orca.state.plugins[pluginName]!.settings!
   const blockEl = target.closest(".orca-block") as HTMLElement | undefined
